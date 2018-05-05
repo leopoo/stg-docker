@@ -1,0 +1,67 @@
+version: "3"
+services:
+  zookeeper:
+    image: zookeeper:3.4.11
+    hostname: zookeeper
+    deploy:
+      placement:
+        constraints:
+          - node.role!=manager
+    networks:
+      - stgtest
+  system:
+    image: nexus.ybveg.com:8082/stg-test/stg-system:latest
+    depends_on:
+      - zookeeper
+    environment:
+      - PROFILE=test,common
+      - ZOOKEEPER_SERVER=zookeeper:2181
+    deploy:
+      placement:
+        constraints:
+          - node.role!=manager
+    networks:
+      - stgtest
+  business:
+    image: nexus.ybveg.com:8082/stg-test/stg-business:latest
+    depends_on:
+      - zookeeper
+    environment:
+      - PROFILE=test,common
+      - ZOOKEEPER_SERVER=zookeeper:2181
+    deploy:
+      placement:
+        constraints:
+          - node.role!=manager
+    networks:
+      - stgtest
+  portal:
+    image: nexus.ybveg.com:8082/stg-test/stg-portal:latest
+    hostname: portal
+    depends_on:
+      - zookeeper
+      - system
+      - business
+    environment:
+      - PROFILE=test,common
+      - ZOOKEEPER_SERVER=zookeeper:2181
+    deploy:
+      placement:
+        constraints:
+          - node.role!=manager
+    networks:
+      - stgtest
+  web:
+    image: nexus.ybveg.com:8082/stg-test/stg-web:latest
+    depends_on:
+      - portal
+    ports: 
+      - "9002:80"
+    deploy:
+      placement:
+        constraints:
+          - node.id==y7aoung237o3hhyad8i8ctlny
+    networks:
+      - stgtest
+networks:
+  stgtest:

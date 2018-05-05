@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+  <!-- <localRepository>/yuanben/repository</localRepository> -->
+
+  <mirrors>
+
+    <mirror>
+      <id>nexusMirror</id>
+      <mirrorOf>*</mirrorOf>
+      <name>nexus-mirror</name>
+
+      <url>http://nexus.ybveg.com/repository/public/</url>
+
+    </mirror>
+
+  </mirrors>
+
+  <servers>
+    <server>
+      <id>yuanben-release</id>
+      <username>yuanben</username>
+      <password>yuanben</password>
+    </server>
+
+    <server>
+      <id>yuanben-snapshot</id>
+      <username>yuanben</username>
+      <password>yuanben</password>
+    </server>
+
+    <server>
+      <id>center-release</id>
+      <username>center</username>
+      <password>center</password>
+    </server>
+
+    <server>
+      <id>center-snapshot</id>
+      <username>center</username>
+      <password>center</password>
+    </server>
+
+    
+    <server>
+      <id>thirdparty</id>
+      <username>yuanben</username>
+      <password>yuanben</password>
+    </server>
+  </servers>
+
+</settings>

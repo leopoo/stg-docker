@@ -1,0 +1,68 @@
+version: "3"
+services:
+  zookeeper:
+    image: zookeeper:3.4.11
+    hostname: zookeeper
+    deploy:
+      placement:
+        constraints:
+          - node.role!=manager
+    networks:
+      - stg-demo
+  system:
+    image: nexus.ybveg.com:8082/stg-demo/stg-system:latest
+    depends_on:
+      - zookeeper
+    environment:
+      - PROFILE=demo,common
+      - ZOOKEEPER_SERVER=zookeeper:2181
+    deploy:
+      placement:
+        constraints:
+          - node.role!=manager
+    networks:
+      - stg-demo
+  business:
+    image: nexus.ybveg.com:8082/stg-demo/stg-business:latest
+    depends_on:
+      - zookeeper
+    environment:
+      - PROFILE=demo,common
+      - ZOOKEEPER_SERVER=zookeeper:2181
+    deploy:
+      placement:
+        constraints:
+          - node.role!=manager
+    networks:
+      - stg-demo
+  portal:
+    image: nexus.ybveg.com:8082/stg-demo/stg-portal:latest
+    hostname: portal
+    depends_on:
+      - zookeeper
+      - system
+      - business
+    environment:
+      - PROFILE=demo,common
+      - ZOOKEEPER_SERVER=zookeeper:2181
+    deploy:
+      placement:
+        constraints:
+          - node.role!=manager
+    networks:
+      - stg-demo
+  web: 
+    image: nexus.ybveg.com:8082/stg-demo/stg-web:latest
+    depends_on:
+      - portal
+    ports: 
+      - "9003:80"
+    deploy:
+      placement:
+        constraints:  ## 必须在172.16.1.103上不上nginx
+          - node.id==y7aoung237o3hhyad8i8ctlny
+    networks:
+      - stgdemo
+
+networks:
+  stgdemo:
